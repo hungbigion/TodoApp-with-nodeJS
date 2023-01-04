@@ -2,13 +2,13 @@
   "name": "todoapi",
   "version": "1.0.0",
   "description": "A todo Api project",
-  "main": "server.js",
+  "main": "index.js",
   "engines": {
     "node": "14.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node index.js"
   },
   "author": "huuHung",
   "license": "MIT",
