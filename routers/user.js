@@ -8,9 +8,9 @@ const { token } = require('morgan');
 const jwt = require('jsonwebtoken');
 
 
-router.get('/',user_jwt, async (req,res,next)=>{
+router.get('/', user_jwt, async (req, res, next) => {
     try {
-        
+
         const user = await User.findById(req.user.id).select('-password');
         res.status(200).json({
             success: true,
@@ -27,13 +27,13 @@ router.get('/',user_jwt, async (req,res,next)=>{
     }
 })
 
-router.post('/login', async (req, res,next) => {
+router.post('/login', async (req, res, next) => {
     const email = req.body.email
     const password = req.body.password
-    
+
     try {
-        
-        let user = await User.findOne({ 
+
+        let user = await User.findOne({
             email: email
         })
 
@@ -44,7 +44,7 @@ router.post('/login', async (req, res,next) => {
             })
         }
 
-        const isMatch = await bcryptjs.compare(password,user.password)
+        const isMatch = await bcryptjs.compare(password, user.password)
         if (!isMatch) {
             return response.status(400).json({
                 success: false,
@@ -52,7 +52,7 @@ router.post('/login', async (req, res,next) => {
             });
         }
 
-        const payload ={
+        const payload = {
             user: {
                 id: user.id
             }
@@ -71,8 +71,8 @@ router.post('/login', async (req, res,next) => {
             });
         })
 
-            
-        
+
+
 
     } catch (error) {
         console.log.error(error);
@@ -85,15 +85,16 @@ router.post('/login', async (req, res,next) => {
 
 })
 
-router.post('/register', async (req,res,next) => {
-    const { username, email,password } = req.body;
+router.post('/register', async (req, res, next) => {
+    const { username, email, password } = req.body;
 
     try {
-        
-        let user_exist = await User.findOne({email: email})
 
-        if (user_exist) {   
-            res.json({
+        let user_exist = await User.findOne({ email: email })
+
+
+        if (user_exist) {
+            return res.json({
                 success: false,
                 msg: 'user already registered'
             });
@@ -106,8 +107,8 @@ router.post('/register', async (req,res,next) => {
         const salt = await bcryptjs.genSalt(10);
         user.password = await bcryptjs.hash(password, salt);
         let size = 200
-        user.avatar = "https://gravatar.com/avatar/?s="+size+'&d=retro';
-        
+        user.avatar = "https://gravatar.com/avatar/?s=" + size + '&d=retro';
+
         await user.save();
 
         const payload = {
@@ -116,10 +117,10 @@ router.post('/register', async (req,res,next) => {
             }
         }
 
-        jwt.sign(payload, process.env.jwtUserSecret,{
-            expiresIn:360000
-        },(err,token) =>{
-            if(err) throw err;
+        jwt.sign(payload, process.env.jwtUserSecret, {
+            expiresIn: 360000
+        }, (err, token) => {
+            if (err) throw err;
             res.status(200).json({
                 success: true,
                 token: token
