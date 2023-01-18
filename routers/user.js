@@ -38,7 +38,7 @@ router.post('/login', async (req, res, next) => {
         })
 
         if (!user) {
-            res.status(400).json({
+            return res.status(400).json({
                 success: false,
                 msg: 'User not exist'
             })
@@ -121,7 +121,7 @@ router.post('/register', async (req, res, next) => {
             expiresIn: 360000
         }, (err, token) => {
             if (err) throw err;
-            res.status(200).json({
+             res.status(200).json({
                 success: true,
                 token: token
             })
