@@ -7,7 +7,6 @@ const user_jwt = require('../middleware/user_jwt');
 const { token } = require('morgan');
 const jwt = require('jsonwebtoken');
 
-
 router.get('/', user_jwt, async (req, res, next) => {
     try {
 
